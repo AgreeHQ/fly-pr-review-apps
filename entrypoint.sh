@@ -63,11 +63,14 @@ if [ -n "$INPUT_SECRETS" ]; then
   echo -e "$INPUT_SECRETS" | flyctl secrets import --app "$app"
 fi
 
-exit 1
-
 # Attach postgres cluster to the app if specified.
 if [ -n "$INPUT_POSTGRES" ]; then
   flyctl postgres attach "$INPUT_POSTGRES" --app "$app" || true
+fi
+
+# Execute any pre-deploy steps if provided
+if [ -n "$INPUT_PREDEPLOY_SCRIPT" ]; then
+  echo -e "$INPUT_PREDEPLOY_SCRIPT" | /bin/sh -l
 fi
 
 # Trigger the deploy of the new version.

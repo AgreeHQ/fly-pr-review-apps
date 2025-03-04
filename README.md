@@ -18,16 +18,17 @@ If you have an existing `fly.toml` in your repo, this action will copy it with a
 | `path`     | Path to run the `flyctl` commands from. Useful if you have an existing `fly.toml` in a subdirectory.                                                                                                     |
 | `postgres` | Optional name of an existing Postgres cluster to `flyctl postgres attach` to.                                                                                                                            |
 | `update`   | Whether or not to update this Fly app when the PR is updated. Default `true`.                                                                                                                            |
-| `secrets`  | Secrets to be set on the app at runtime. Separate multiple secrets with a space                                                                                                                                     |
-| `build_args` | Optional Docker --build-arg |
+| `secrets`  | Secrets to be set on the app at runtime. Separate multiple secrets with a space                                                                                                                          |
+| `build_args` | Optional Docker --build-arg       |
 | `build_secrets` | Optional Docker --build-secret |
 | `vmsize`   | Set app VM to a named size, eg. shared-cpu-1x, dedicated-cpu-1x, dedicated-cpu-2x etc. Takes precedence over cpu, cpu kind, and memory inputs.                                                           |
 | `cpu`      | Set app VM CPU (defaults to 1 cpu). Default 1.                                                                                                                                                           |
 | `cpukind`  | Set app VM CPU kind - shared or performance. Default shared.                                                                                                                                             |
 | `memory`   | Set app VM memory in megabytes. Default 256.                                                                                                                                                             |
 | `ha`       | Create spare machines that increases app availability. Default `false`.                                                                                                                                  |
-| `launch_options`       | Attaches additional options to fly at app creation if specified                                                                                                                                  |
-| `deploy_options`       | Attaches additional options to the fly deploy command if specified                                                                                                                                  |
+| `launch_options`       | Attaches additional options to fly at app creation if specified                                                                                                                              |
+| `deploy_options`       | Attaches additional options to the fly deploy command if specified                                                                                                                           |
+| `predeploy_script`     | Arbitrary script to run before deploy and after launch                                                                                                                                       |
 
 ## Required Secrets
 
