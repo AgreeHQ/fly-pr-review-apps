@@ -48,3 +48,5 @@ inputs:
     description: Additional options to pass to the Fly deploy command
   predeploy_script:
     description: Script to run before deploying the app
+  postdeploy_script:
+    description: Script to run after deploying the app

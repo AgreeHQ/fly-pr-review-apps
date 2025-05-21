@@ -89,3 +89,8 @@ echo "hostname=$hostname" >> $GITHUB_OUTPUT
 echo "url=https://$hostname" >> $GITHUB_OUTPUT
 echo "id=$appid" >> $GITHUB_OUTPUT
 echo "name=$app" >> $GITHUB_OUTPUT
+
+# Execute any post-deploy steps if provided
+if [ -n "$INPUT_POSTDEPLOY_SCRIPT" ]; then
+  echo -e "$INPUT_POSTDEPLOY_SCRIPT" | /bin/sh -l
+fi

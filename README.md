@@ -29,6 +29,7 @@ If you have an existing `fly.toml` in your repo, this action will copy it with a
 | `launch_options`       | Attaches additional options to fly at app creation if specified                                                                                                                              |
 | `deploy_options`       | Attaches additional options to the fly deploy command if specified                                                                                                                           |
 | `predeploy_script`     | Arbitrary script to run before deploy and after launch                                                                                                                                       |
+| `postdeploy_script`     | Arbitrary script to run after deploy (i.e. verify health checks)                                                                                                                                       |
 
 ## Required Secrets
 
