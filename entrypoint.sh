@@ -60,7 +60,7 @@ if ! flyctl status --app "$app"; then
 fi
 
 if [ -n "$INPUT_SECRETS" ]; then
-  echo -e "$INPUT_SECRETS" | flyctl secrets import --app "$app"
+  echo -e "$INPUT_SECRETS" | flyctl secrets import --app "$app" --stage
 fi
 
 # Attach postgres cluster to the app if specified.
