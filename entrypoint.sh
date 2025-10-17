@@ -65,7 +65,11 @@ fi
 
 # Attach postgres cluster to the app if specified.
 if [ -n "$INPUT_POSTGRES" ]; then
-  flyctl postgres attach "$INPUT_POSTGRES" --app "$app" || true
+  if [ "$INPUT_MPG" = "true" ]; then
+    flyctl mpg attach "$INPUT_POSTGRES" --app "$app" || true
+  else
+    flyctl postgres attach "$INPUT_POSTGRES" --app "$app" || true
+  fi
 fi
 
 # Execute any pre-deploy steps if provided

@@ -23,9 +23,11 @@ inputs:
   org:
     description: Organization to launch the app in (alternatively, set the env FLY_ORG)
   path:
-    description: path to a directory containing a fly.toml to clone
+    description: Path to a directory containing a fly.toml to clone
   postgres:
     description: Optionally attach the app to a pre-existing Postgres cluster on Fly
+  mpg:
+    description: Whether or not the Postgres cluster is MPG or not. Ignored if 'postgres' is not set.
   secrets:
     description: Secrets to be set on the app at runtime. Separate multiple secrets with a space
   vmsize:
