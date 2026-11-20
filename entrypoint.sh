@@ -1,6 +1,7 @@
 #!/bin/sh -l
 
-set -ex
+# No command tracing (-x): commands here carry secret values.
+set -e
 
 if [ -n "$INPUT_PATH" ]; then
   # Allow user to change directories in which to run Fly commands.
@@ -46,6 +47,14 @@ fi
 
 if [ -n "$INPUT_BUILD_SECRETS" ]; then
   for ARG in $(echo "$INPUT_BUILD_SECRETS" | tr " " "\n"); do
+    # flyctl quotes a malformed entry back in its error, so reject it here.
+    case "$ARG" in
+    *=*) ;;
+    *)
+      echo "build_secrets: each entry must be NAME=VALUE, with no spaces in the value."
+      exit 1
+      ;;
+    esac
     build_secrets="$build_secrets --build-secret ${ARG}"
   done
 fi
@@ -60,15 +69,28 @@ if ! flyctl status --app "$app"; then
 fi
 
 if [ -n "$INPUT_SECRETS" ]; then
-  echo -e "$INPUT_SECRETS" | flyctl secrets import --app "$app" --stage
+  # flyctl quotes a malformed line back in its error, so its output is not shown.
+  if echo -e "$INPUT_SECRETS" | flyctl secrets import --app "$app" --stage >/dev/null 2>&1; then
+    echo "Staged secrets for $app."
+  else
+    echo "flyctl secrets import failed for $app (output hidden: it can contain secret values)."
+    exit 1
+  fi
 fi
 
-# Attach postgres cluster to the app if specified.
+# Attach postgres cluster to the app if specified. flyctl prints the new
+# connection string, so its output is not shown. Attaching fails when the app
+# already has the secret (every redeploy); that does not fail the action.
 if [ -n "$INPUT_POSTGRES" ]; then
   if [ "$INPUT_MPG" = "true" ]; then
-    flyctl mpg attach "$INPUT_POSTGRES" --app "$app" || true
+    pg_command="mpg"
   else
-    flyctl postgres attach "$INPUT_POSTGRES" --app "$app" || true
+    pg_command="postgres"
+  fi
+  if flyctl "$pg_command" attach "$INPUT_POSTGRES" --app "$app" >/dev/null 2>&1; then
+    echo "Attached Postgres cluster $INPUT_POSTGRES to $app."
+  else
+    echo "Did not attach Postgres cluster $INPUT_POSTGRES to $app; expected if it is already attached (output hidden)."
   fi
 fi
 
